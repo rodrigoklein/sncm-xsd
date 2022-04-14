@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://sncm.anvisa.gov.br/"
+	xmlns:tns="http://sncm.anvisa.gov.br/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
+	<xs:include schemaLocation="sncmModel.xsd" />
+
+	<xs:element name="msgMdataMAH" type="tns:msgMdataMAH" />
+	<xs:element name="retMdataMAH" type="tns:retMdataMAH" />
+
+	<xs:complexType name="msgMdataMAH">
+		<xs:sequence>
+			<xs:element name="docId" type="tns:uniqueId" />
+			<xs:element name="ccTime" type="tns:utcOnlyDateTime" />
+			<xs:element name="ver" type="tns:version" />
+			<xs:element name="lc" type="tns:locale" />
+			<xs:element name="env" type="tns:environment" />
+			<xs:element name="declarant" type="tns:membro" />
+			<xs:element minOccurs="0" name="mbrAgt" type="tns:cnpj" />
+			<xs:element name="usrAgt" type="tns:microtext" />
+			<xs:element name="comnd" type="tns:command" />
+			<xs:element name="regAnvisa" type="tns:regAnvisa" />
+			<xs:element minOccurs="0" name="mdata" type="tns:metadata" />
+			<xs:element minOccurs="0" name="interrupt" type="tns:interrupt" />
+			<!--<xs:element minOccurs="0" ref="ds:Signature" />-->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="retMdataMAH">
+		<xs:sequence>
+			<xs:element name="docId" type="tns:uniqueId" />
+			<xs:element name="crTime" type="tns:utcOnlyDateTime" />
+			<xs:element name="ver" type="tns:version" />
+			<xs:element name="lc" type="tns:locale" />
+			<xs:element name="env" type="tns:environment" />
+			<xs:element name="backOff" type="tns:backOfficeId" />
+			<xs:element name="regAnvisa" type="tns:regAnvisa" />
+			<xs:element maxOccurs="unbounded" minOccurs="0"	name="mdata" type="tns:metadata" />
+			<xs:element name="rets">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"	name="ret" type="tns:webServiceReturn" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="anom" type="xs:boolean" />
+			<xs:element name="notif" type="xs:boolean" />
+			<xs:element name="action" type="xs:boolean" />
+			<!--<xs:element ref="ds:Signature" minOccurs="0" />-->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="metadata">
+		<xs:sequence>
+			<xs:element name="atcWho" type="tns:atcWHOCode" />
+			<xs:element name="atcDDD" type="tns:microtext" />
+			<xs:element name="atcEph" type="tns:atcEphMRACode" />
+			<xs:element name="regClass" type="tns:regClass" />
+			<xs:element name="initDate" type="xs:date" />
+			<xs:element minOccurs="0" name="presType" type="tns:prescriptionType" />
+			<xs:element minOccurs="0" name="finalDate" type="xs:date" />
+			<xs:element maxOccurs="unbounded" name="gtin" type="tns:gtin" />
+			<xs:element minOccurs="0" name="breakDate" type="xs:date" />
+			<xs:element minOccurs="0" name="reason"	type="tns:interruptReason" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="interrupt">
+		<xs:sequence>
+			<xs:element name="breakDate" type="xs:date" />
+			<xs:element name="reason" type="tns:interruptReason" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

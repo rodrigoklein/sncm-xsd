@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://sncm.anvisa.gov.br/"
+	xmlns:tns="http://sncm.anvisa.gov.br/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+
+	<xs:simpleType name="microtext">
+		<xs:annotation>
+			<xs:documentation>Auxiliary data type for some event elements.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="140" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="microtextNotEmpty">
+		<xs:annotation>
+			<xs:documentation>Auxiliary data type for some event elements. A string composed of only whitespaces is also not allowed.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="140" />
+			<xs:pattern value=".*[^\s].*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="microtextNullable">
+		<xs:annotation>
+			<xs:documentation>Auxiliary data type for some event elements.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0" />
+			<xs:maxLength value="140" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="cpf">
+		<xs:restriction base="xs:string">
+			<xs:length value="11" />
+			<xs:pattern value="\d{11}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="cnpj">
+		<xs:restriction base="xs:string">
+			<xs:length value="14" />
+			<xs:pattern value="\d{14}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="cnes">
+		<xs:restriction base="xs:string">
+			<xs:length value="7" />
+			<xs:pattern value="\d{7}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="professionalRegistrationCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="2" />
+			<xs:maxLength value="20" />
+			<xs:pattern value="[A-Z]+[\-]{0,1}[0-9A-Z]+"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="businessTransactionId">
+		<xs:restriction base="xs:string">
+			<xs:length value="44" />
+			<xs:pattern value="[0-9]{44}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="date">
+		<xs:annotation>
+			<xs:documentation>Format: yyyy-mm-dd.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:date">
+			<xs:pattern value="[0-9]{4}\-(0[1-9]{1}|1[0-2]{1})\-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="gtin">
+		<xs:restriction base="xs:string">
+			<xs:length value="14" />
+			<xs:pattern value="\d{14}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="productUnitSerialCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="20" />
+			<xs:pattern value="[0-9A-Z]+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="lot">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0" />
+			<xs:maxLength value="20" />
+			<xs:pattern value="[0-9A-Z]+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="sscc">
+		<xs:annotation>
+			<xs:documentation>Serial Shipping Container Code - Auxiliary data
+				type to define TransportationPackageId.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="20" />
+			<xs:pattern value="[0]{2}\d{18}" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- 	<xs:simpleType name="sscc"> -->
+	<!-- 		<xs:annotation> -->
+	<!-- 			<xs:documentation>Serial Shipping Container Code - Auxiliary data -->
+	<!-- 				type to define TransportationPackageId.</xs:documentation> -->
+	<!-- 		</xs:annotation> -->
+	<!-- 		<xs:restriction base="xs:string"> -->
+	<!-- 			<xs:length value="18" /> -->
+	<!-- 			<xs:pattern value="\d{18}" /> -->
+	<!-- 		</xs:restriction> -->
+	<!-- 	</xs:simpleType> -->
+
+	<!-- 2018-09-26 gtinWithSn is 01+gtin+21+serial - probably came on the xsd sent by anvisa, its not on the docs -->
+	<xs:simpleType name="gtinWithSn">
+		<xs:annotation>
+			<xs:documentation>GTIN + serial number - Auxiliary data type to
+				define TransportationPackageId.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="19" />
+			<xs:maxLength value="38" />
+			<xs:pattern value="[0]{1}[1]{1}\d{14}[2]{1}[1]{1}[0-9A-Z]+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="adHocTransportationPackageSerialCode">
+		<xs:annotation>
+			<xs:documentation>Auxiliary data type to define
+				AdHocTransportationPackageId, a GS1 standard non-compliant
+				TransportationPackageId.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="38" />
+			<xs:pattern value="([0]{1}[2-9A-Z]{1}|[1-9A-Z]{1}[0-9A-Z]{1})[0-9A-Z]+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="environment">
+	    <xs:restriction base="xs:int">
+	        <xs:pattern value="[1-2]{1}" />
+	    </xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="version">
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="15" />
+            </xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="utcOnlyDateTime">
+		<xs:annotation>
+			<xs:documentation>A strict subset of the XSD standard dateTime type
+				(ISO 8601), accepting only dateTime values conforming to the format
+				"yyyy-mm-ddThh:mm:ssZ".</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime">
+			<xs:pattern value=".*:\d{2}Z" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="returnCode">
+		<xs:restriction base="xs:string">
+			<xs:length value="5" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="status">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK" />
+			<xs:enumeration value="NO" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="backOfficeId">
+	    <xs:restriction base="xs:int">
+	        <xs:pattern value="[0-9]{0,1}[0-9]{1}" />
+	    </xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="anomCode">
+		<xs:restriction base="xs:string">
+			<xs:length value="7" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="notificationCode">
+		<xs:restriction base="xs:string">
+			<xs:length value="8" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="actionCode">
+		<xs:restriction base="xs:string">
+			<xs:length value="9" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- 	if someday sncm becomes international, the pattern for lc should be this one: -->
+	<!-- 	min 2 chars, max 5 chars, if it has 2 chars, it must be aa, if it haves more than 2 chars, it must have 5 and be of the type aa-AA -->
+	<!-- 	<xs:simpleType name="lc"> -->
+	<!-- 		<xs:restriction base="xs:string"> -->
+	<!-- 			<xs:minLength value="2" /> -->
+	<!-- 			<xs:maxLength value="5" /> -->
+	<!-- 			<xs:pattern value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*" /> -->
+	<!-- 		</xs:restriction> -->
+	<!-- 	</xs:simpleType> -->
+
+	<!-- 	initially, only pt-BR is allowed -->
+	<xs:simpleType name="locale">
+		<xs:restriction base="xs:string">
+			<xs:length value="5" />
+			<xs:pattern value="pt-BR" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="command">
+		<xs:restriction base="xs:int">
+			<xs:pattern value="[1-9]{1}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="regAnvisa">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="13" />
+			<xs:pattern value="[0-9]+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="effect">
+		<xs:annotation>
+			<xs:documentation>
+				* REJ - REJECTION
+				* WNG - WARNING
+				* SUC - SUCCESS
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="REJ" />
+			<xs:enumeration value="WNG" />
+			<xs:enumeration value="SUC" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="atcWHOCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="7" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="atcEphMRACode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="7" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="regClass">
+		<xs:annotation>
+			<xs:documentation>
+				* CR001 – A1/A2 Entorpecentes
+				* CR002 – A3/B1 Psicotropicas
+				* CR003 – B2 Anorexigenas
+				* CR004 – C1 Outras substâncias
+				* CR005 – C2 Retinoides (sistemico)
+				* CR006 – C3 Imunossupressor (Talidomida/Lenalidomida)
+				* CR007 – C5 Anabolizantes
+				* CR008 – Antibioticos/Antimicrobianos
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CR001" />
+			<xs:enumeration value="CR002" />
+			<xs:enumeration value="CR003" />
+			<xs:enumeration value="CR004" />
+			<xs:enumeration value="CR005" />
+			<xs:enumeration value="CR006" />
+			<xs:enumeration value="CR007" />
+			<xs:enumeration value="CR008" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="interruptReason">
+		<xs:annotation>
+			<xs:documentation>
+				* IR001 – Comercial
+				* IR002 – Parque Fabril
+				* IR003 – Processo de Fabricacao
+				* IR004 – Principio Ativo
+				* IR005 – Questoes Logisticas
+				* IR006 – Regulatorio
+				* IR007 – Outros
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="IR001" />
+			<xs:enumeration value="IR002" />
+			<xs:enumeration value="IR003" />
+			<xs:enumeration value="IR004" />
+			<xs:enumeration value="IR005" />
+			<xs:enumeration value="IR006" />
+			<xs:enumeration value="IR007" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="prescriptionType">
+		<xs:annotation>
+			<xs:documentation>
+				* NR001 – Notificacao de Receita A (Notificacao Amarela)
+				* NR002 – Notificacao de Receita B (Notificacao Azul)
+				* NR003 – Notificacao de Receita B2(Notificacao Azul)
+				* NR004 – Notificacao de Receita Especial para Retinoides de Uso Sistemico (Notificacao Branca)
+				* NR005 – Notificacao de Receita Especial para Talidomida (Notificacao Branca)
+				* NR006 – Notificacao de Receita Especial para Lenalidomida (Cor definida pelo detentor do registro)
+				* NR007 – Receita de Controle Especial (Sem cor definida)
+				* NR008 – Receita Antimicrobiano em 2 vias.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NR001" />
+			<xs:enumeration value="NR002" />
+			<xs:enumeration value="NR003" />
+			<xs:enumeration value="NR004" />
+			<xs:enumeration value="NR005" />
+			<xs:enumeration value="NR006" />
+			<xs:enumeration value="NR007" />
+			<xs:enumeration value="NR008" />
+		</xs:restriction>
+	</xs:simpleType>
+
+
+    <xs:simpleType name="blistType">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1" />
+			<xs:maxInclusive value="2" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="userAgent">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="20" />
+		</xs:restriction>
+	</xs:simpleType>
+
+<!-- 	<xs:simpleType name="typeOutsrc"> -->
+<!-- 		<xs:restriction base="xs:string"> -->
+<!-- 			<xs:minLength value="7" /> -->
+<!-- 			<xs:maxLength value="14" /> -->
+<!-- 			<xs:pattern value="\d{7}|\d{11}|\d{14}" /> -->
+<!-- 		</xs:restriction> -->
+<!-- 	</xs:simpleType> -->
+
+	<xs:simpleType name="foreignStakeholderId">
+		<xs:restriction base="tns:microtext" />
+	</xs:simpleType>
+
+	<xs:simpleType name="uniqueId">
+		<xs:restriction base="xs:string">
+			<xs:length value="20" />
+			<xs:pattern value="[0-9A-Z]{20}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="eventInstanceId">
+		<xs:annotation>
+			<xs:documentation>One among various pieces of information returned by
+				SNCM after a successful event notification.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="20" />
+			<xs:pattern value="[0-9A-Z]{20}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="businessTransactionType">
+		<xs:annotation>
+			<xs:documentation>E.g. NF-e, NFC-e (types of invoices).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="tns:microtext" />
+	</xs:simpleType>
+
+	<xs:simpleType name="moveReason">
+		<xs:annotation>
+			<xs:documentation>
+				* 10 - Trade (sale / purchase)
+				* 11 - Transfer
+				* 12 - Donation
+				* 13 - Free sample
+				* 14 - Damaged, moving for proper disposal
+				* 15 - Expired, moving for proper disposal
+				* 16 - Recalled, moving for proper disposal
+				* 17 - Return
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="10" />
+			<xs:maxInclusive value="17" />
+			<xs:pattern value="[1]{1}[0-7]{1}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="unitFinalizationReason">
+		<xs:annotation>
+			<xs:documentation>
+				* 30 - Dispensation
+				* 31 - Seal break
+				* 32 - Disposal
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="30" />
+			<xs:maxInclusive value="32" />
+			<xs:pattern value="[3]{1}[0-2]{1}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="payloadFinalizationReason">
+		<xs:annotation>
+			<xs:documentation>
+				* 40 - Exportation
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="40" />
+			<xs:maxInclusive value="40" />
+			<xs:pattern value="[4]{1}[0]{1}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="justifiedPayloadFinalizationReason">
+		<xs:annotation>
+			<xs:documentation>
+				* 50 - Damaged, cannot be moved for proper disposal
+				* 51 - Disappeared
+				* 52 - Robbed
+				* 53 - Seized
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="50" />
+			<xs:maxInclusive value="53" />
+			<xs:pattern value="[5]{1}[0-3]{1}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="icd">
+		<xs:annotation>
+			<xs:documentation>International Disease Code, without decimal point. Alphanumeric characters only. Do not include "." or "/".</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="3"/>
+			<xs:maxLength value="6"/>
+			<xs:pattern value="[0-9A-Z]+"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="membro">
+		<xs:choice>
+			<xs:element name="cpf" type="tns:cpf" />
+			<xs:element name="cnpj" type="tns:cnpj" />
+			<xs:element name="cnes" type="tns:cnes" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="events">
+		<xs:sequence>
+			<xs:choice maxOccurs="unbounded" minOccurs="1">
+				<xs:element name="activ" type="tns:activationEvent" />
+				<xs:element name="shpt" type="tns:shipmentEvent" />
+				<xs:element name="rec" type="tns:receptionEvent" />
+				<xs:element name="final" type="tns:finalizationEvent"/>
+<!-- 				<xs:element name="unitFin" type="tns:eventoFinalizationUnitaria" /> -->
+<!-- 				<xs:element name="pldFin" type="tns:eventPayloadFinalization" /> -->
+<!-- 				<xs:element name="justifFin" type="tns:eventJustifiedPayloadFinalization" /> -->
+				<xs:element name="evtRvctn" type="tns:revokeEvent" />
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="activationEvent">
+		<xs:complexContent>
+			<xs:extension base="tns:replaceableEvent">
+				<xs:sequence>
+					<xs:element name="import" type="xs:boolean" />
+					<xs:choice minOccurs="1" maxOccurs="unbounded">
+						<xs:element name="dui" type="tns:dui" />
+						<xs:element name="compDui" type="tns:compositeDui" />
+					</xs:choice>
+					<xs:element name="outsrc" type="tns:membro" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="revokeEvent">
+		<xs:complexContent>
+			<xs:extension base="tns:abstractEvent">
+				<xs:sequence>
+					<xs:element name="revoking" type="tns:revokedEventInstanceId" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="shipmentEvent">
+		<xs:complexContent>
+			<xs:extension base="tns:move">
+				<xs:sequence />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="transportationPackageId">
+		<xs:choice>
+			<xs:element name="sscc" type="tns:sscc"/>
+			<xs:element name="gtinSn" type="tns:gtinWithSn"/>
+			<xs:element name="adHocTpi" type="tns:transportPackagePackageAdHoc"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="transportationPackageWithContents">
+		<xs:sequence>
+			<xs:element name="tpi" type="tns:transportationPackageId"/>
+			<xs:choice>
+				<xs:element name="pld" type="tns:payload"/>
+				<xs:sequence>
+					<xs:element name="unvPld" type="xs:boolean"/>
+					<xs:element name="supdPld" type="tns:payload" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="payload">
+		<xs:choice minOccurs="1" maxOccurs="unbounded">
+			<xs:element name="tp" type="tns:transportationPackageWithContents"/>
+			<xs:element name="dui" type="tns:dui"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="businessTransaction">
+		<xs:sequence>
+			<xs:element name="bizTransId" type="tns:businessTransactionId"/>
+			<xs:element name="bizTransType" type="tns:businessTransactionType" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="unitSealBreak">
+		<xs:sequence>
+			<xs:element name="dui" type="tns:dui"/>
+			<xs:element name="desc" type="tns:microtext" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="sealBreak">
+		<xs:sequence>
+			<xs:element name="s" type="tns:unitSealBreak" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="unitDispensation">
+		<xs:sequence>
+			<xs:element name="dui" type="tns:dui"/>
+			<xs:element name="desc" type="tns:microtext" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="cons" type="tns:cpf" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="unitDispensationWithPrescription">
+		<xs:sequence>
+			<xs:element name="dui" type="tns:dui"/>
+			<xs:element name="desc" type="tns:microtext" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="presCode" type="tns:professionalRegistrationCode"/>
+			<xs:element name="presDate" type="tns:date"/>
+			<xs:element name="phcistMgr" type="tns:cpf"/>
+			<xs:choice>
+				<xs:element name="pnn" type="tns:microtext"/>
+				<xs:element name="pnnSNCR" type="tns:microtext"/>
+			</xs:choice>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="cons" type="tns:cpf"/>
+					<xs:element name="pat" type="tns:cpf"/>
+				</xs:sequence>
+				<xs:element name="pat" type="tns:cpf"/>
+			</xs:choice>
+			<xs:element minOccurs="0" name="icd" type="tns:icd"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="dispensation">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="d" type="tns:unitDispensation" minOccurs="1" maxOccurs="unbounded"/>
+				<xs:element name="dwp" type="tns:unitDispensationWithPrescription" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="disposal">
+		<xs:sequence>
+			<xs:element name="dui" type="tns:dui" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="desc" type="tns:microtext"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="exportation">
+		<xs:sequence>
+			<xs:element name="pld" type="tns:payload"/>
+			<xs:element name="receiver" type="tns:microtext"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="uncontrolledFinalization">
+		<xs:sequence>
+			<xs:element name="pld" type="tns:payload"/>
+			<xs:element name="but" type="tns:payload" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="desc" type="tns:microtext"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="finalizationEvent">
+		<xs:complexContent>
+			<xs:extension base="tns:replaceableEvent">
+				<xs:sequence>
+					<xs:choice>
+						<xs:element name="dispn" type="tns:dispensation"/>
+						<xs:element name="sealBrk" type="tns:sealBreak"/>
+						<xs:element name="xport" type="tns:exportation"/>
+						<xs:element name="destroy" type="tns:disposal"/>
+						<xs:element name="damage" type="tns:uncontrolledFinalization"/>
+						<xs:element name="disapp" type="tns:uncontrolledFinalization"/>
+						<xs:element name="robry" type="tns:uncontrolledFinalization"/>
+						<xs:element name="seizure" type="tns:uncontrolledFinalization"/>
+						<xs:element name="snvs" type="tns:uncontrolledFinalization"/>
+						<xs:element name="military" type="tns:uncontrolledFinalization"/>
+						<xs:element name="quality" type="tns:uncontrolledFinalization"/>
+					</xs:choice>
+					<xs:element name="bizTrans" type="tns:businessTransaction" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+<!-- 	<xs:complexType name="eventoFinalizationUnitaria"> -->
+<!-- 		<xs:complexContent> -->
+<!-- 			<xs:extension base="tns:replaceableEvent"> -->
+<!-- 				<xs:sequence> -->
+<!-- 					<xs:element name="rsn" type="tns:unitFinalizationReason" /> -->
+<!-- 					<xs:element name="dui" type="tns:dui" minOccurs="1"	maxOccurs="unbounded" /> -->
+<!-- 					<xs:element name="bizTrans" type="tns:businessTransaction"	minOccurs="0" maxOccurs="1" /> -->
+<!-- 				</xs:sequence> -->
+<!-- 			</xs:extension> -->
+<!-- 		</xs:complexContent> -->
+<!-- 	</xs:complexType> -->
+
+<!-- 	<xs:complexType name="eventPayloadFinalization"> -->
+<!-- 		<xs:complexContent> -->
+<!-- 			<xs:extension base="tns:replaceableEvent"> -->
+<!-- 				<xs:sequence> -->
+<!-- 					<xs:element name="rsn" type="tns:payloadFinalizationReason" /> -->
+<!-- 					<xs:element name="pld" type="tns:medicineCargo" /> -->
+<!-- 					<xs:element name="bizTrans" type="tns:businessTransaction" -->
+<!-- 						minOccurs="0" maxOccurs="1" /> -->
+<!-- 				</xs:sequence> -->
+<!-- 			</xs:extension> -->
+<!-- 		</xs:complexContent> -->
+<!-- 	</xs:complexType> -->
+
+<!-- 	<xs:complexType name="eventJustifiedPayloadFinalization"> -->
+<!-- 		<xs:complexContent> -->
+<!-- 			<xs:extension base="tns:replaceableEvent"> -->
+<!-- 				<xs:sequence> -->
+<!-- 					<xs:element name="rsn" type="tns:justifiedPayloadFinalizationReason" /> -->
+<!-- 					<xs:element name="pld" type="tns:medicineCargo" /> -->
+<!-- 					<xs:element name="but" type="tns:but" minOccurs="0" maxOccurs="1" /> -->
+<!-- 					<xs:element name="ratnl" type="tns:microtext" /> -->
+<!-- 					<xs:element name="bizTrans" type="tns:businessTransaction" minOccurs="0" maxOccurs="1" /> -->
+<!-- 				</xs:sequence> -->
+<!-- 			</xs:extension> -->
+<!-- 		</xs:complexContent> -->
+<!-- 	</xs:complexType> -->
+
+	<xs:complexType abstract="true" name="move">
+		<xs:complexContent>
+			<xs:extension base="tns:replaceableEvent">
+				<xs:sequence>
+					<xs:element name="fit" type="xs:boolean" />
+					<xs:element name="partner" type="tns:membro" />
+					<xs:element name="carrs">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="car" type="tns:stakeholder" minOccurs="1" maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="pld" type="tns:medicineCargo" />
+					<xs:element minOccurs="0" name="bizTrans" type="tns:businessTransaction" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType abstract="true" name="replaceableEvent">
+		<xs:complexContent>
+			<xs:extension base="tns:abstractEvent">
+				<xs:sequence>
+					<xs:choice>
+						<xs:element name="realTime" type="xs:string" />
+						<xs:sequence>
+							<xs:element name="pastTime" type="tns:utcOnlyDateTime" />
+							<xs:element minOccurs="0" maxOccurs="1" name="replacing" type="tns:revokedEventInstanceId" />
+						</xs:sequence>
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType abstract="true" name="abstractEvent">
+		<xs:sequence>
+			<xs:element name="evtNotifId" type="tns:uniqueId" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="stakeholder">
+		<xs:choice>
+			<xs:element name="cpf" type="tns:cpf" />
+			<xs:element name="cnpj" type="tns:cnpj" />
+			<xs:element name="cnes" type="tns:cnes" />
+			<xs:element name="profReg" type="tns:professionalRegistrationCode" />
+			<xs:element name="frgnId" type="tns:foreignStakeholderId" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="medicineCargo">
+		<xs:choice minOccurs="1" maxOccurs="unbounded">
+			<xs:element maxOccurs="unbounded" name="tp" type="tns:transportationPackageWithContents" />
+			<xs:element maxOccurs="unbounded" name="dui" type="tns:dui" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="but">
+		<xs:choice minOccurs="1" maxOccurs="unbounded">
+			<xs:element maxOccurs="unbounded" name="tp" type="tns:transportPackage" />
+			<xs:element maxOccurs="unbounded" name="dui" type="tns:dui" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="transportPackage">
+		<xs:sequence>
+			<xs:element name="tpi" type="tns:transportationPackageId" />
+			<xs:element minOccurs="0" name="pld" type="tns:medicineCargo" />
+		</xs:sequence>
+	</xs:complexType>
+
+<!-- 	<xs:complexType name="transportPackageId"> -->
+<!-- 		<xs:choice> -->
+<!-- 			<xs:element name="sscc" type="tns:sscc" /> -->
+<!-- 			<xs:element name="gtinWithSn" type="tns:gtinWithSn" /> -->
+<!-- 			<xs:element name="adHocTranspPkgId" type="tns:transportPackagePackageAdHoc" /> -->
+<!-- 		</xs:choice> -->
+<!-- 	</xs:complexType> -->
+
+	<xs:complexType name="transportPackagePackageAdHoc">
+		<xs:sequence>
+			<xs:element name="shpr" type="tns:stakeholder" />
+			<xs:element name="adHocTransportationPackageSerialCode" type="tns:adHocTransportationPackageSerialCode" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="dui">
+		<xs:annotation>
+			<xs:documentation>Drug unit identifier.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="gtin" type="tns:gtin" />
+			<xs:element name="serl" type="tns:productUnitSerialCode" />
+			<xs:element name="exp" type="xs:gYearMonth" />
+			<xs:element name="lot" type="tns:lot" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="revokedEventInstanceId">
+		<xs:sequence>
+			<xs:element name="origEvtId" type="tns:uniqueId" />
+			<xs:element name="desc" type="tns:microtextNotEmpty" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="receptionEvent">
+		<xs:complexContent>
+			<xs:extension base="tns:move">
+				<xs:sequence />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="compositeDui">
+		<xs:sequence>
+			<xs:element name="dui" type="tns:dui" />
+			<xs:element name="compnts" type="tns:compositeDuiComponents" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="compositeDuiComponents">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" name="dui" type="tns:dui" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="shipment">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="tp" type="tns:transportPackage" />
+			<xs:element minOccurs="0" name="memberId" type="tns:membro" />
+			<xs:element minOccurs="0" name="datePkg" type="xs:dateTime" />
+			<xs:element minOccurs="0" name="docId" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="webServiceReturn">
+		<xs:sequence>
+			<xs:element name="code" type="tns:returnCode" />
+			<xs:element name="effect" type="tns:effect" />
+			<xs:element name="desc" type="tns:microtextNullable" />
+		</xs:sequence>
+	</xs:complexType>
+
+<!-- 	<xs:complexType name="signature"> -->
+<!-- 		<xs:sequence> -->
+<!-- 			<xs:element minOccurs="1" maxOccurs="1" name="SignedInfo"> -->
+<!-- 				<xs:complexType> -->
+<!-- 					<xs:sequence> -->
+<!-- 						<xs:element minOccurs="1" maxOccurs="1" name="CanonicalizationMethod"> -->
+<!-- 							<xs:complexType> -->
+<!-- 								<xs:simpleContent> -->
+<!-- 									<xs:extension base="xs:string"> -->
+<!-- 										<xs:attribute use="required" type="xs:anyURI" name="Algorithm" /> -->
+<!-- 									</xs:extension> -->
+<!-- 								</xs:simpleContent> -->
+<!-- 							</xs:complexType> -->
+<!-- 						</xs:element> -->
+<!-- 						<xs:element minOccurs="1" maxOccurs="1" name="SignatureMethod"> -->
+<!-- 							<xs:complexType> -->
+<!-- 								<xs:simpleContent> -->
+<!-- 									<xs:extension base="xs:string"> -->
+<!-- 										<xs:attribute use="required" type="xs:anyURI" name="Algorithm" /> -->
+<!-- 									</xs:extension> -->
+<!-- 								</xs:simpleContent> -->
+<!-- 							</xs:complexType> -->
+<!-- 						</xs:element> -->
+<!-- 						<xs:element minOccurs="1" maxOccurs="1" name="Reference"> -->
+<!-- 							<xs:complexType> -->
+<!-- 								<xs:sequence> -->
+<!-- 									<xs:element minOccurs="1" maxOccurs="1" name="Transforms"> -->
+<!-- 										<xs:complexType> -->
+<!-- 											<xs:sequence> -->
+<!-- 												<xs:element minOccurs="2" maxOccurs="2" name="Transform" > -->
+<!-- 													<xs:complexType> -->
+<!-- 														<xs:simpleContent> -->
+<!-- 															<xs:extension base="xs:string"> -->
+<!-- 																<xs:attribute type="xs:anyURI" name="Algorithm" use="required" /> -->
+<!-- 															</xs:extension> -->
+<!-- 														</xs:simpleContent> -->
+<!-- 													</xs:complexType> -->
+<!-- 												</xs:element> -->
+<!-- 											</xs:sequence> -->
+<!-- 										</xs:complexType> -->
+<!-- 									</xs:element> -->
+<!-- 									<xs:element minOccurs="1" maxOccurs="1" name="DigestMethod"> -->
+<!-- 										<xs:complexType> -->
+<!-- 											<xs:simpleContent> -->
+<!-- 												<xs:extension base="xs:string"> -->
+<!-- 													<xs:attribute use="required" type="xs:anyURI" name="Algorithm" /> -->
+<!-- 												</xs:extension> -->
+<!-- 											</xs:simpleContent> -->
+<!-- 										</xs:complexType> -->
+<!-- 									</xs:element> -->
+<!-- 									<xs:element minOccurs="1" maxOccurs="1" type="xs:string" name="DigestValue" /> -->
+<!-- 								</xs:sequence> -->
+<!-- 								<xs:attribute use="required" type="xs:string" name="URI" /> -->
+<!-- 							</xs:complexType> -->
+<!-- 						</xs:element> -->
+<!-- 					</xs:sequence> -->
+<!-- 				</xs:complexType> -->
+<!-- 			</xs:element> -->
+<!-- 			<xs:element minOccurs="1" maxOccurs="1" type="xs:string" name="SignatureValue" /> -->
+<!-- 			<xs:element minOccurs="1" maxOccurs="1" name="KeyInfo"> -->
+<!-- 				<xs:complexType> -->
+<!-- 					<xs:sequence> -->
+<!-- 						<xs:element minOccurs="1" maxOccurs="1" name="X509Data"> -->
+<!-- 							<xs:complexType> -->
+<!-- 								<xs:sequence> -->
+<!-- 									<xs:element minOccurs="1" maxOccurs="1" type="xs:string" name="X509Certificate" /> -->
+<!-- 								</xs:sequence> -->
+<!-- 							</xs:complexType> -->
+<!-- 						</xs:element> -->
+<!-- 					</xs:sequence> -->
+<!-- 				</xs:complexType> -->
+<!-- 			</xs:element> -->
+<!-- 		</xs:sequence> -->
+<!-- 	</xs:complexType> -->
+
+</xs:schema>

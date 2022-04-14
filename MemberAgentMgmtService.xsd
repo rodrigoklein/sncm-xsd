@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://sncm.anvisa.gov.br/"
+	xmlns:tns="http://sncm.anvisa.gov.br/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
+	<xs:include schemaLocation="sncmModel.xsd" />
+
+	<xs:element name="msgMbrAgtMgmt" type="tns:msgMbrAgtMgmt" />
+	<xs:element name="retMbrAgtMgmt" type="tns:retMbrAgtMgmt" />
+
+	<xs:complexType name="msgMbrAgtMgmt">
+		<xs:sequence>
+			<xs:element name="docId" type="tns:uniqueId" />
+			<xs:element name="ccTime" type="tns:utcOnlyDateTime" />
+			<xs:element name="ver" type="tns:version" />
+			<xs:element name="lc" type="tns:locale" />
+			<xs:element name="env" type="tns:environment" />
+			<xs:element name="declarant" type="tns:membro" />
+			<xs:element minOccurs="0" name="mbrAgt" type="tns:cnpj" />
+			<xs:element name="usrAgt" type="tns:microtext" />
+			<xs:element name="mbrAgts">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="mbrAgt"	type="tns:memberAgentDetail" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="ds:Signature" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="retMbrAgtMgmt">
+		<xs:sequence>
+			<xs:element name="docId" type="tns:uniqueId" />
+			<xs:element name="crTime" type="tns:utcOnlyDateTime" />
+			<xs:element minOccurs="0" name="ver" type="tns:version" />
+			<xs:element name="lc" type="tns:locale" />
+			<xs:element name="env" type="tns:environment" />
+			<xs:element name="backOff" type="tns:backOfficeId" />
+			<xs:element minOccurs="0" name="list">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"	name="cnpj" type="tns:userAgent" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" name="rets">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"	name="ret" type="tns:webServiceReturn" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" name="anom" type="xs:boolean" />
+			<xs:element minOccurs="0" name="notif" type="xs:boolean" />
+			<xs:element minOccurs="0" name="action" type="xs:boolean" />
+			<xs:element ref="ds:Signature" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="memberAgentDetail">
+		<xs:sequence>
+			<xs:element name="comnd" type="tns:command" />
+			<xs:element minOccurs="0" name="cnpj" type="tns:cnpj" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

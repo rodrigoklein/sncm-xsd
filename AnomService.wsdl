@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sncm.anvisa.gov.br/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="AnomService" targetNamespace="http://sncm.anvisa.gov.br/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://sncm.anvisa.gov.br/" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://sncm.anvisa.gov.br/">
+  <xs:element name="dataMsg" type="tns:dataMsg"/>
+  <xs:complexType name="dataMsg">
+    <xs:sequence>
+      <xs:element name="dataMsg" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="anom" nillable="true" type="tns:dataMsg"/>
+  <xs:element name="anomResponse" nillable="true" type="xs:string"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="anom">
+    <wsdl:part element="tns:anom" name="anom">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="anomResponse">
+    <wsdl:part element="tns:anomResponse" name="anomResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AnomService">
+    <wsdl:operation name="anom">
+      <wsdl:input message="tns:anom" name="anom">
+    </wsdl:input>
+      <wsdl:output message="tns:anomResponse" name="anomResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AnomServiceSoapBinding" type="tns:AnomService">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="anom">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="anom">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="anomResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AnomService">
+    <wsdl:port binding="tns:AnomServiceSoapBinding" name="AnomService">
+      <soap12:address location="http://localhost:8080/SNCMRastreamentoService/AnomService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

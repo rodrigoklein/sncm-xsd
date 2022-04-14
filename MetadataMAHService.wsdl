@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sncm.anvisa.gov.br/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="MetadataMAHService" targetNamespace="http://sncm.anvisa.gov.br/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://sncm.anvisa.gov.br/" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://sncm.anvisa.gov.br/">
+  <xs:element name="dataMsg" type="tns:dataMsg"/>
+  <xs:complexType name="dataMsg">
+    <xs:sequence>
+      <xs:element name="dataMsg" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mdataMAH" nillable="true" type="tns:dataMsg"/>
+  <xs:element name="mdataMAHResponse" nillable="true" type="xs:string"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="mdataMAHResponse">
+    <wsdl:part element="tns:mdataMAHResponse" name="mdataMAHResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="mdataMAH">
+    <wsdl:part element="tns:mdataMAH" name="mdataMAH">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="MetadataMAHService">
+    <wsdl:operation name="mdataMAH">
+      <wsdl:input message="tns:mdataMAH" name="mdataMAH">
+    </wsdl:input>
+      <wsdl:output message="tns:mdataMAHResponse" name="mdataMAHResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MetadataMAHServiceSoapBinding" type="tns:MetadataMAHService">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="mdataMAH">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="mdataMAH">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="mdataMAHResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MetadataMAHService">
+    <wsdl:port binding="tns:MetadataMAHServiceSoapBinding" name="MetadataMAHService">
+      <soap12:address location="http://localhost:8080/SNCMRastreamentoService/MetadataMAHService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
